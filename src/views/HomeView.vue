@@ -1,8 +1,17 @@
 <script setup>
-import ThreeDotsButton from '@/components/ThreeDotsButton.vue'
 import PageHeader from '@/components/PageHeader.vue'
 import MainColumn from '@/components/MainColumn.vue'
-import CardContent from '@/components/CardContent.vue'
+import { cols } from '@/mocks/cols'
+import { tasks } from '@/mocks/tasks'
+import { onMounted, ref } from 'vue'
+
+const loading = ref(true)
+
+onMounted(
+  setTimeout(() => {
+    loading.value = false
+  }, 3000),
+)
 </script>
 
 <template>
@@ -339,160 +348,16 @@ import CardContent from '@/components/CardContent.vue'
     <main class="main">
       <div class="container">
         <div class="main__block">
-          <div class="main__content">
-            <div class="main__column column">
-              <div class="column__title">
-                <p>Без статуса</p>
-              </div>
-              <div class="cards">
-                <div class="cards__item">
-                  <div class="cards__card card">
-                    <div class="card__group">
-                      <div class="card__theme _orange">
-                        <p class="_orange">Web Design</p>
-                      </div>
-                      <a href="#popBrowse" target="_self">
-                        <ThreeDotsButton />
-                      </a>
-                    </div>
-                    <CardContent />
-                  </div>
-                </div>
-
-                <div class="cards__item">
-                  <div class="cards__card card">
-                    <div class="card__group">
-                      <div class="card__theme _green">
-                        <p class="_green">Research</p>
-                      </div>
-                      <a href="#popBrowse" target="_self">
-                        <ThreeDotsButton />
-                      </a>
-                    </div>
-                    <CardContent />
-                  </div>
-                </div>
-
-                <div class="cards__item">
-                  <div class="cards__card card">
-                    <div class="card__group">
-                      <div class="card__theme _orange">
-                        <p class="_orange">Web Design</p>
-                      </div>
-                      <a href="#popBrowse" target="_self">
-                        <ThreeDotsButton />
-                      </a>
-                    </div>
-                    <CardContent />
-                  </div>
-                </div>
-
-                <div class="cards__item">
-                  <div class="cards__card card">
-                    <div class="card__group">
-                      <div class="card__theme _purple">
-                        <p class="_purple">Copywriting</p>
-                      </div>
-                      <a href="#popBrowse" target="_self">
-                        <ThreeDotsButton />
-                      </a>
-                    </div>
-                    <CardContent />
-                  </div>
-                </div>
-
-                <div class="cards__item">
-                  <div class="cards__card card">
-                    <div class="card__group">
-                      <div class="card__theme _orange">
-                        <p class="_orange">Web Design</p>
-                      </div>
-                      <a href="#popBrowse" target="_self">
-                        <ThreeDotsButton />
-                      </a>
-                    </div>
-                    <CardContent />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="main__column">
-              <div class="column__title">
-                <p>Нужно сделать</p>
-              </div>
-              <div class="cards">
-                <div class="cards__item"></div>
-              </div>
-            </div>
-            <div class="main__column">
-              <div class="column__title">
-                <p>В работе</p>
-              </div>
-              <div class="cards">
-                <div class="cards__item">
-                  <div class="cards__card card">
-                    <div class="card__group">
-                      <div class="card__theme _green">
-                        <p class="_green">Research</p>
-                      </div>
-                      <a href="#popBrowse" target="_self">
-                        <ThreeDotsButton />
-                      </a>
-                    </div>
-                    <CardContent />
-                  </div>
-                </div>
-
-                <div class="cards__item">
-                  <div class="cards__card card">
-                    <div class="card__group">
-                      <div class="card__theme _purple">
-                        <p class="_purple">Copywriting</p>
-                      </div>
-                      <a href="#popBrowse" target="_self">
-                        <ThreeDotsButton />
-                      </a>
-                    </div>
-                    <CardContent />
-                  </div>
-                </div>
-
-                <div class="cards__item">
-                  <div class="cards__card card">
-                    <div class="card__group">
-                      <div class="card__theme _orange">
-                        <p class="_orange">Web Design</p>
-                      </div>
-                      <a href="#popBrowse" target="_self">
-                        <ThreeDotsButton />
-                      </a>
-                    </div>
-                    <CardContent />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="main__column">
-              <div class="column__title">
-                <p>Тестирование</p>
-              </div>
-              <div class="cards">
-                <div class="cards__item">
-                  <div class="cards__card card">
-                    <div class="card__group">
-                      <div class="card__theme _green">
-                        <p class="_green">Research</p>
-                      </div>
-                      <a href="#popBrowse" target="_self">
-                        <ThreeDotsButton />
-                      </a>
-                    </div>
-                    <CardContent />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <MainColumn />
+          <div v-if="loading" style="display: flex; justify-content: center; align-items: center">
+            <p>Данные загружаются</p>
+          </div>
+          <div v-else class="main__content">
+            <MainColumn
+              v-for="col in cols"
+              :key="col.label"
+              :title="col.label"
+              :cards="tasks.filter((task) => task.status === col.value)"
+            />
           </div>
         </div>
       </div>
