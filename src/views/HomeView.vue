@@ -3,6 +3,15 @@ import PageHeader from '@/components/PageHeader.vue'
 import MainColumn from '@/components/MainColumn.vue'
 import { cols } from '@/mocks/cols'
 import { tasks } from '@/mocks/tasks'
+import { onMounted, ref } from 'vue'
+
+const loading = ref(true)
+
+onMounted(
+  setTimeout(() => {
+    loading.value = false
+  }, 3000),
+)
 </script>
 
 <template>
@@ -339,7 +348,10 @@ import { tasks } from '@/mocks/tasks'
     <main class="main">
       <div class="container">
         <div class="main__block">
-          <div class="main__content">
+          <div v-if="loading" style="display: flex; justify-content: center; align-items: center">
+            <p>Данные загружаются</p>
+          </div>
+          <div v-else class="main__content">
             <MainColumn
               v-for="col in cols"
               :key="col.label"
