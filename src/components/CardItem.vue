@@ -24,4 +24,76 @@ defineProps({
   </div>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.cards__item {
+  padding: 5px;
+  animation-name: card-animation;
+  animation-duration: 500ms;
+  animation-timing-function: linear;
+}
+.cards__card {
+  width: 220px;
+  height: 130px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: stretch;
+  padding: 15px 13px 19px;
+}
+
+.card__group {
+  width: 100%;
+  height: 20px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.card__theme {
+  width: auto;
+  height: 20px;
+  padding: 5px 14px;
+  border-radius: 18px;
+}
+.card__theme p {
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 10px;
+}
+
+@media screen and (max-width: 1200px) {
+  .cards__card {
+    width: 220px;
+    height: 130px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: stretch;
+    padding: 15px 13px 19px;
+  }
+}
+
+._orange {
+  background-color: #ffe4c2;
+  color: #ff6d00;
+}
+
+._green {
+  background-color: #b4fdd1;
+  color: #06b16e;
+}
+
+._purple {
+  background-color: #e9d4ff;
+  color: #9a48f1;
+}
+
+._gray {
+  background: #94a6be;
+  color: #ffffff;
+}
+</style>
