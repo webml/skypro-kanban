@@ -1,7 +1,7 @@
 <script setup>
 import CardItem from './CardItem.vue'
 
-defineProps({ title: String, cards: Array })
+defineProps({ title: String, cards: Array, isLoading: Boolean })
 </script>
 
 <template>
@@ -10,7 +10,8 @@ defineProps({ title: String, cards: Array })
       <p>{{ title }}</p>
     </div>
     <div class="cards">
-      <CardItem v-for="card in cards" :key="card.id" :card="card" />
+      <CardItem v-if="isLoading" :isLoading="isLoading" />
+      <CardItem v-else v-for="card in cards" :key="card.id" :card="card" />
     </div>
   </div>
 </template>

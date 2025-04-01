@@ -5,11 +5,11 @@ import { cols } from '@/mocks/cols'
 import { tasks } from '@/mocks/tasks'
 import { onMounted, ref } from 'vue'
 
-const loading = ref(true)
+const isLoading = ref(true)
 
 onMounted(
   setTimeout(() => {
-    loading.value = false
+    isLoading.value = false
   }, 3000),
 )
 </script>
@@ -348,15 +348,20 @@ onMounted(
     <main class="main">
       <div class="container">
         <div class="main__block">
-          <div v-if="loading" style="display: flex; justify-content: center; align-items: center">
-            <p>Данные загружаются</p>
-          </div>
-          <div v-else class="main__content">
+          <div class="main__content">
+            <div
+              v-if="!isLoading && tasks.length === 0"
+              style="display: flex; justify-content: center; align-items: center"
+            >
+              <p>Задач нет</p>
+            </div>
             <MainColumn
+              v-else
               v-for="col in cols"
               :key="col.label"
               :title="col.label"
               :cards="tasks.filter((task) => task.status === col.value)"
+              :isLoading="isLoading"
             />
           </div>
         </div>
@@ -365,7 +370,7 @@ onMounted(
   </div>
 </template>
 
-<style lang="sass" scoped>
+<style scoped>
 .wrapper {
   max-width: 100%;
   width: 100vw;
@@ -395,7 +400,7 @@ onMounted(
   }
 }
 
-  @media screen and (max-width: 1200px) {
+@media screen and (max-width: 1200px) {
   .main__block {
     width: 100%;
     margin: 0 auto;
@@ -404,5 +409,5 @@ onMounted(
   .main__content {
     display: block;
   }
-  }
+}
 </style>

@@ -1,15 +1,37 @@
 <script setup>
+import BaseLoader from './BaseLoader.vue'
 import CardContent from './CardContent.vue'
 import ThreeDotsButton from './ThreeDotsButton.vue'
 import { groups } from '@/mocks/groups'
 
 defineProps({
-  card: { id: Number, topic: String, title: String, date: String, status: String || null },
+  card: {
+    id: Number,
+    topic: String,
+    title: String,
+    date: String,
+    status: String || null,
+  },
+  isLoading: Boolean,
 })
 </script>
 
 <template>
-  <div class="cards__item">
+  <div v-if="isLoading" class="cards__item">
+    <div class="cards__card card">
+      <div class="card__group">
+        <BaseLoader class="card__theme" :width="82" :height="20" :border-radius="18" />
+        <BaseLoader :width="18" :height="4" />
+      </div>
+      <div class="loader__content">
+        <BaseLoader :width="113" :height="13" />
+
+        <BaseLoader :width="58" :height="13" />
+      </div>
+    </div>
+  </div>
+
+  <div v-else class="cards__item">
     <div class="cards__card card">
       <div class="card__group">
         <div :class="['card__theme ', groups[card.topic]]">
@@ -25,6 +47,24 @@ defineProps({
 </template>
 
 <style lang="scss" scoped>
+@keyframes card-animation {
+  0% {
+    height: 0;
+    opacity: 0;
+  }
+  100% {
+    height: auto;
+    opacity: 1;
+  }
+}
+
+.loader__content {
+  display: flex;
+  flex-direction: column;
+  height: 61px;
+  justify-content: space-between;
+}
+
 .cards__item {
   padding: 5px;
   animation-name: card-animation;
