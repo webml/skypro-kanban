@@ -7,7 +7,7 @@ import { onMounted, ref } from 'vue'
 
 const isLoading = ref(true)
 
-onMounted(
+onMounted(() =>
   setTimeout(() => {
     isLoading.value = false
   }, 3000),
