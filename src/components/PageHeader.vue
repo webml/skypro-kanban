@@ -18,4 +18,24 @@ import HeaderNav from './HeaderNav.vue'
   </header>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.header {
+  width: 100%;
+  margin: 0 auto;
+  background-color: #ffffff;
+}
+.header__block {
+  height: 70px;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  top: 0;
+  left: 0;
+  padding: 0 10px;
+}
+.header__logo img {
+  width: 85px;
+}
+</style>
