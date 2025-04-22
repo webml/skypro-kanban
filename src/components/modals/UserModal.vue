@@ -7,11 +7,21 @@
       <p>Темная тема</p>
       <input type="checkbox" class="checkbox" name="checkbox" />
     </div>
-    <button type="button" class="_hover03"><a href="#popExit">Выйти</a></button>
+    <button type="button" :onclick="logout" class="_hover03"><a href="#popExit">Выйти</a></button>
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+function logout(e) {
+  e.preventDefault() // Блокируем стандартное действие ссылки
+  localStorage.removeItem('userInfo') // Удаляем информацию о пользователе
+  router.push('/log-in') // Отправляем на экран входа
+}
+</script>
 
 <style lang="scss" scoped>
 .header__pop-user-set {

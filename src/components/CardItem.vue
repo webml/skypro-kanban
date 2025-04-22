@@ -1,5 +1,5 @@
 <script setup>
-import BaseLoader from './BaseLoader.vue'
+import BaseLoader from './ui/BaseLoader.vue'
 import CardContent from './CardContent.vue'
 import ThreeDotsButton from './ThreeDotsButton.vue'
 import { groups } from '@/mocks/groups'
@@ -115,25 +115,5 @@ defineProps({
     justify-content: stretch;
     padding: 15px 13px 19px;
   }
-}
-
-._orange {
-  background-color: #ffe4c2;
-  color: #ff6d00;
-}
-
-._green {
-  background-color: #b4fdd1;
-  color: #06b16e;
-}
-
-._purple {
-  background-color: #e9d4ff;
-  color: #9a48f1;
-}
-
-._gray {
-  background: #94a6be;
-  color: #ffffff;
 }
 </style>
