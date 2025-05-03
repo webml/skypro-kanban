@@ -9,13 +9,15 @@
             <form class="pop-new-card__form form-new" id="formNewCard" action="#">
               <div class="form-new__block">
                 <label for="formTitle" class="subttl">Название задачи</label>
-                <input
+                <BaseInput
+                  width="370"
+                  height="49"
                   class="form-new__input"
-                  type="text"
                   name="name"
                   id="formTitle"
                   placeholder="Введите название задачи..."
                   autofocus
+                  v-model="task.title"
                 />
               </div>
               <div class="form-new__block">
@@ -25,6 +27,7 @@
                   name="text"
                   id="textArea"
                   placeholder="Введите описание задачи..."
+                  v-model="task.description"
                 ></textarea>
               </div>
             </form>
@@ -52,12 +55,21 @@
 </template>
 
 <script setup>
+import { ref } from 'vue'
 import BaseCalendar from '../ui/BaseCalendar.vue'
+import BaseInput from '../ui/BaseInput.vue'
+
+const task = ref({
+  title: undefined,
+  topic: undefined,
+  status: undefined,
+  description: undefined,
+  date: undefined,
+})
 </script>
 
 <style lang="scss" scoped>
 .pop-new-card {
-  display: none;
   width: 100%;
   min-width: 375px;
   height: 100%;

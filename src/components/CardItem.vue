@@ -4,7 +4,7 @@ import CardContent from './CardContent.vue'
 import ThreeDotsButton from './ThreeDotsButton.vue'
 import { groups } from '@/mocks/groups'
 
-defineProps({
+const { card, isLoading } = defineProps({
   card: {
     id: Number,
     topic: String,
@@ -41,7 +41,7 @@ defineProps({
           <ThreeDotsButton />
         </a>
       </div>
-      <CardContent />
+      <CardContent :task="card" />
     </div>
   </div>
 </template>
