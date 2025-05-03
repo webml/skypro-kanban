@@ -1,7 +1,7 @@
 <script setup>
 import CardItem from './CardItem.vue'
 
-defineProps({ title: String, cards: Array, isLoading: Boolean })
+const { title, cards, isLoading } = defineProps({ title: String, cards: Array, isLoading: Boolean })
 </script>
 
 <template>

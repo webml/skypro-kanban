@@ -1,12 +1,18 @@
 <script setup>
-import HomeView from './views/HomeView.vue'
+import { RouterView } from 'vue-router'
 </script>
 
 <template>
-  <HomeView />
+  <RouterView />
 </template>
 
 <style scoped>
+body {
+  background-color: #eaeef6;
+  width: 100vw;
+  height: 100dvh;
+}
+
 header {
   line-height: 1.5;
   max-height: 100vh;
