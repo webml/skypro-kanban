@@ -34,7 +34,7 @@ const router = createRouter({
       },
     },
     {
-      path: '/sign-in',
+      path: '/sign-up',
       component: SignUpView, // Отдельный компонент для регистрации
     },
     {

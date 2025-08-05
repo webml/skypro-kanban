@@ -1,7 +1,9 @@
 <template>
-  <div></div>
+  <TaskModal />
 </template>
 
-<script setup></script>
+<script setup>
+import TaskModal from '@/components/modals/TaskModal.vue'
+</script>
 
 <style lang="scss" scoped></style>

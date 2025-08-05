@@ -1,15 +1,25 @@
 <script setup>
 import CalendarIcon from '@/components/icons/CalendarIcon.vue'
+
+const { task } = defineProps({
+  task: {
+    id: Number,
+    topic: String,
+    title: String,
+    date: String,
+    status: String || null,
+  },
+})
 </script>
 
 <template>
   <div class="card__content">
-    <a href="" target="_blank">
+    <RouterLink :to="`/task/${task.id}`">
       <h3 class="card__title">Название задачи</h3>
-    </a>
+    </RouterLink>
     <div class="card__date">
       <CalendarIcon />
-      <p>30.10.23</p>
+      <p>{{ task.date }}</p>
     </div>
   </div>
 </template>

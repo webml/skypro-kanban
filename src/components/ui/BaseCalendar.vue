@@ -65,7 +65,8 @@
       <input type="hidden" id="datepick_value" value="08.09.2023" />
       <div class="calendar__period">
         <p class="calendar__p date-end">
-          Выберите срок исполнения <span class="date-control"></span>.
+          {{ date ? 'Срок исполнения:' : 'Выберите срок исполнения' }}
+          <span class="date-control">{{ date }}</span>
         </p>
       </div>
     </div>
@@ -75,6 +76,10 @@
 <script setup>
 import NextIcon from '../icons/NextIcon.vue'
 import PrevIcon from '../icons/PrevIcon.vue'
+
+const { date } = defineProps({
+  date: { type: String || undefined, default: undefined },
+})
 </script>
 
 <style lang="scss" scoped>

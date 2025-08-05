@@ -31,6 +31,7 @@ body {
 
 .error-container {
   text-align: center;
+  min-height: 100vh;
 }
 
 .error-code {

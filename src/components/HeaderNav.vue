@@ -1,17 +1,22 @@
 <script setup>
 import { ref } from 'vue'
 import UserModal from './modals/UserModal.vue'
+import { useRouter } from 'vue-router'
 
 const isShowModal = ref(false)
 const changeShowModal = () => {
   isShowModal.value = !isShowModal.value
 }
+
+const router = useRouter()
+
+const createTask = () => router.push('/task/add')
 </script>
 
 <template>
   <nav class="header__nav">
-    <button class="header__btn-main-new _hover01" id="btnMainNew">
-      <a href="#popNewCard">Создать новую задачу</a>
+    <button class="header__btn-main-new _hover01" id="btnMainNew" :onclick="createTask">
+      Создать новую задачу
     </button>
     <button class="header__user _hover02" @click="changeShowModal">Ivan Ivanov</button>
     <UserModal v-if="isShowModal" />
