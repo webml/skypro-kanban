@@ -1,24 +1,23 @@
 <script setup>
 import PageHeader from '@/components/PageHeader.vue'
 import MainColumn from '@/components/MainColumn.vue'
-import { cols } from '@/mocks/cols'
-import { tasks } from '@/mocks/tasks'
-import { onMounted, ref } from 'vue'
+import { statuses } from '@/mocks/statuses'
+import { onMounted, ref, provide } from 'vue'
 import { RouterView } from 'vue-router'
 import { getTasks } from '@/services/api'
 
-// const isLoading = ref(true)
-const isLoading = ref(false)
+const isLoading = ref(true)
+const tasks = ref([])
 
-// const tasks = ref([])
+provide('tasksStore', tasks)
 
-// onMounted(async () => {
-//   const taskList = await getTasks()
-//   if (taskList) {
-//     tasks.value = taskList
-//     isLoading.value = false
-//   }
-// })
+onMounted(async () => {
+  const taskList = await getTasks()
+  if (taskList) {
+    tasks.value = taskList
+    isLoading.value = false
+  }
+})
 </script>
 
 <template>
@@ -36,10 +35,10 @@ const isLoading = ref(false)
             </div>
             <MainColumn
               v-else
-              v-for="col in cols"
-              :key="col.label"
-              :title="col.label"
-              :cards="tasks.filter((task) => task.status === col.value)"
+              v-for="status in statuses"
+              :key="status.label"
+              :title="status.label"
+              :cards="tasks.filter((task) => task.status === status.value)"
               :isLoading="isLoading"
             />
           </div>

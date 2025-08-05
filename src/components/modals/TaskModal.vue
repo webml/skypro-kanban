@@ -9,26 +9,7 @@
               <p class="_orange">Web Design</p>
             </div>
           </div>
-          <div class="pop-browse__status status">
-            <p class="status__p subttl">Статус</p>
-            <div class="status__themes">
-              <div class="status__theme _hide">
-                <p>Без статуса</p>
-              </div>
-              <div class="status__theme _gray">
-                <p class="_gray">Нужно сделать</p>
-              </div>
-              <div class="status__theme _hide">
-                <p>В работе</p>
-              </div>
-              <div class="status__theme _hide">
-                <p>Тестирование</p>
-              </div>
-              <div class="status__theme _hide">
-                <p>Готово</p>
-              </div>
-            </div>
-          </div>
+          <ModalStatus />
           <div class="pop-browse__wrap">
             <form class="pop-browse__form form-browse" id="formBrowseCard" action="#">
               <div class="form-browse__block">
@@ -50,27 +31,7 @@
               <p class="_orange">Web Design</p>
             </div>
           </div>
-          <div class="pop-browse__btn-browse">
-            <div class="btn-group">
-              <button class="btn-browse__edit _btn-bor _hover03">
-                <a href="#">Редактировать задачу</a>
-              </button>
-              <button class="btn-browse__delete _btn-bor _hover03">
-                <a href="#">Удалить задачу</a>
-              </button>
-            </div>
-            <button class="btn-browse__close _btn-bg _hover01"><a href="#">Закрыть</a></button>
-          </div>
-          <div class="pop-browse__btn-edit _hide">
-            <div class="btn-group">
-              <button class="btn-edit__edit _btn-bg _hover01"><a href="#">Сохранить</a></button>
-              <button class="btn-edit__edit _btn-bor _hover03"><a href="#">Отменить</a></button>
-              <button class="btn-edit__delete _btn-bor _hover03" id="btnDelete">
-                <a href="#">Удалить задачу</a>
-              </button>
-            </div>
-            <button class="btn-edit__close _btn-bg _hover01"><a href="#">Закрыть</a></button>
-          </div>
+          <ModalFooter />
         </div>
       </div>
     </div>
@@ -79,6 +40,8 @@
 
 <script setup>
 import BaseCalendar from '@/components/ui/BaseCalendar.vue'
+import ModalFooter from '../TaskModal/ModalFooter.vue'
+import ModalStatus from '../TaskModal/ModalStatus.vue'
 </script>
 
 <style lang="scss" scoped>
@@ -151,21 +114,21 @@ import BaseCalendar from '@/components/ui/BaseCalendar.vue'
   display: block;
   margin-bottom: 20px;
 }
-.pop-browse__btn-browse,
-.pop-browse__btn-edit {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  justify-content: space-between;
-}
-.pop-browse__btn-browse button,
-.pop-browse__btn-edit button {
-  height: 30px;
-  margin-bottom: 10px;
-  padding: 0 14px;
-}
-.pop-browse__btn-browse .btn-group button,
-.pop-browse__btn-edit .btn-group button {
-  margin-right: 8px;
-}
+// .pop-browse__btn-browse,
+// .pop-browse__btn-edit {
+//   display: flex;
+//   flex-wrap: wrap;
+//   align-items: flex-start;
+//   justify-content: space-between;
+// }
+// .pop-browse__btn-browse button,
+// .pop-browse__btn-edit button {
+//   height: 30px;
+//   margin-bottom: 10px;
+//   padding: 0 14px;
+// }
+// .pop-browse__btn-browse .btn-group button,
+// .pop-browse__btn-edit .btn-group button {
+//   margin-right: 8px;
+// }
 </style>
