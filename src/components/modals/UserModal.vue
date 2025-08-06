@@ -18,8 +18,7 @@ const router = useRouter()
 
 function logout(e) {
   e.preventDefault() // Блокируем стандартное действие ссылки
-  localStorage.removeItem('userInfo') // Удаляем информацию о пользователе
-  router.push('/log-in') // Отправляем на экран входа
+  router.push('/log-out')
 }
 </script>
 
