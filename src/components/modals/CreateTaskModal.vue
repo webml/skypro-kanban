@@ -33,20 +33,7 @@
             </form>
             <BaseCalendar />
           </div>
-          <div class="pop-new-card__categories categories">
-            <p class="categories__p subttl">Категория</p>
-            <div class="categories__themes">
-              <div class="categories__theme _orange _active-category">
-                <p class="_orange">Web Design</p>
-              </div>
-              <div class="categories__theme _green">
-                <p class="_green">Research</p>
-              </div>
-              <div class="categories__theme _purple">
-                <p class="_purple">Copywriting</p>
-              </div>
-            </div>
-          </div>
+          <CategorySelector v-model="task.topic" :is-edit="true" />
           <button class="form-new__create _hover01" id="btnCreate" @click.prevent="createTask">
             Создать задачу
           </button>
@@ -62,6 +49,7 @@ import BaseCalendar from '../ui/BaseCalendar.vue'
 import BaseInput from '../ui/BaseInput.vue'
 import { addTaskQuery } from '@/services/api'
 import { useRouter } from 'vue-router'
+import CategorySelector from '../TaskModal/CategorySelector.vue'
 
 const task = ref({
   title: undefined,
