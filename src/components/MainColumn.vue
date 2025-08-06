@@ -1,5 +1,5 @@
 <script setup>
-import CardItem from './CardItem.vue'
+import CardItem from './TaskCard/CardItem.vue'
 
 const { title, cards, isLoading } = defineProps({ title: String, cards: Array, isLoading: Boolean })
 </script>

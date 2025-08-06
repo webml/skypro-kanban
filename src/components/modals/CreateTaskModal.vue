@@ -10,8 +10,8 @@
               <div class="form-new__block">
                 <label for="formTitle" class="subttl">Название задачи</label>
                 <BaseInput
-                  width="370"
-                  height="49"
+                  :width="370"
+                  :height="49"
                   class="form-new__input"
                   name="name"
                   id="formTitle"
@@ -47,7 +47,9 @@
               </div>
             </div>
           </div>
-          <button class="form-new__create _hover01" id="btnCreate">Создать задачу</button>
+          <button class="form-new__create _hover01" id="btnCreate" @click.prevent="createTask">
+            Создать задачу
+          </button>
         </div>
       </div>
     </div>
@@ -55,9 +57,11 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { inject, ref } from 'vue'
 import BaseCalendar from '../ui/BaseCalendar.vue'
 import BaseInput from '../ui/BaseInput.vue'
+import { addTaskQuery } from '@/services/api'
+import { useRouter } from 'vue-router'
 
 const task = ref({
   title: undefined,
@@ -66,6 +70,17 @@ const task = ref({
   description: undefined,
   date: undefined,
 })
+const router = useRouter()
+
+const tasksStore = inject('tasksStore')
+
+const createTask = () => {
+  addTaskQuery(task.value).then((data) => {
+    console.log(data)
+    tasksStore.value = data.tasks
+    router.push('/')
+  })
+}
 </script>
 
 <style lang="scss" scoped>

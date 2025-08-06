@@ -14,8 +14,8 @@ const { task } = defineProps({
 
 <template>
   <div class="card__content">
-    <RouterLink :to="`/task/${task.id}`">
-      <h3 class="card__title">Название задачи</h3>
+    <RouterLink :to="`/task/${task._id}`">
+      <h3 class="card__title">{{ task.title }}</h3>
     </RouterLink>
     <div class="card__date">
       <CalendarIcon />

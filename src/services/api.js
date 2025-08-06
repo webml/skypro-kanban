@@ -36,7 +36,7 @@ export async function signUp({ name, login, password }) {
 const getAuthHeader = () => {
   const userInfo = JSON.parse(localStorage.getItem('userInfo'))
   const token = userInfo?.token
-  return token ? { Authorization: `Bearer ${token}` } : {}
+  return token ? { Authorization: `Bearer ${token}`, 'Content-Type': '' } : {}
 }
 
 export const getTasks = async () => {
@@ -70,15 +70,15 @@ export const getTaskById = async (taskId) => {
   }
 }
 
-export const addTask = async (taskData) => {
+export const addTaskQuery = async (taskData) => {
   try {
     const response = await axios.post(
       API_URL + '/kanban',
       {
         title: taskData.title || 'Новая задача',
         topic: taskData.topic || 'Research',
-        status: taskData.status || 'Без статуса',
-        description: taskData.description || '',
+        status: taskData.status || 'no_status',
+        description: taskData.description || ' ',
         date: taskData.date || new Date().toISOString(),
       },
       {
@@ -97,15 +97,15 @@ export const addTask = async (taskData) => {
   }
 }
 
-export const updateTask = async (taskId, taskData) => {
+export const updateTaskQuery = async (taskId, taskData) => {
   try {
     const response = await axios.put(
       `${API_URL}/kanban/${taskId}`,
       {
         title: taskData.title || 'Новая задача',
         topic: taskData.topic || 'Research',
-        status: taskData.status || 'Без статуса',
-        description: taskData.description || '',
+        status: taskData.status || 'no_status',
+        description: taskData.description || ' ',
         date: taskData.date || new Date().toISOString(),
       },
       {
@@ -124,7 +124,7 @@ export const updateTask = async (taskId, taskData) => {
   }
 }
 
-export const deleteTask = async (taskId) => {
+export const deleteTaskQuery = async (taskId) => {
   try {
     const response = await axios.delete(`${API_URL}/kanban/${taskId}`, {
       headers: getAuthHeader(),

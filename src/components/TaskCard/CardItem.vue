@@ -1,5 +1,5 @@
 <script setup>
-import BaseLoader from './ui/BaseLoader.vue'
+import BaseLoader from '../ui/BaseLoader.vue'
 import CardContent from './CardContent.vue'
 import ThreeDotsButton from './ThreeDotsButton.vue'
 import { groups } from '@/mocks/groups'
