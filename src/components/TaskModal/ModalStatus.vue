@@ -1,7 +1,8 @@
 <template>
   <div class="pop-browse__status status">
     <p class="status__p subttl">Статус</p>
-    <div class="status__themes">
+    <BaseLoader v-if="isLoading" :width="104" :height="36" :border-radius="24" />
+    <div v-else class="status__themes">
       <div
         v-for="status in statuses"
         :key="status"
@@ -24,9 +25,11 @@ import { ref, watch, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { defineProps, defineEmits } from 'vue'
 import { statuses } from '@/mocks/statuses'
+import BaseLoader from '../ui/BaseLoader.vue'
 
 const props = defineProps({
   modelValue: String, // текущий статус передаётся через v-model
+  isLoading: Boolean,
 })
 const emit = defineEmits(['update:modelValue'])
 
@@ -45,6 +48,8 @@ const currentStatus = computed({
   get: () => props.modelValue,
   set: (val) => emit('update:modelValue', val),
 })
+
+console.log(currentStatus)
 
 function handleStatusClick(status) {
   if (!isEdit.value) return
@@ -68,7 +73,7 @@ function handleStatusClick(status) {
 .status__theme {
   border-radius: 24px;
   border: 0.7px solid rgba(148, 166, 190, 0.4);
-  color: #94a6be;
+  color: #333;
   padding: 11px 14px 10px;
   margin-right: 7px;
   margin-bottom: 7px;

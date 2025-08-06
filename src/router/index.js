@@ -32,6 +32,7 @@ const router = createRouter({
             {
               path: 'task/:id/edit',
               component: () => import('@/views/TaskView.vue'),
+              meta: { isEdit: true },
             },
           ],
           meta: {

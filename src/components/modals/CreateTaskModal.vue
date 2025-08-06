@@ -76,7 +76,6 @@ const tasksStore = inject('tasksStore')
 
 const createTask = () => {
   addTaskQuery(task.value).then((data) => {
-    console.log(data)
     tasksStore.value = data.tasks
     router.push('/')
   })
