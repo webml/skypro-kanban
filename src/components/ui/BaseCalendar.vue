@@ -1,5 +1,5 @@
 <template>
-  <div class="pop-new-card__calendar calendar">
+  <div :class="['pop-new-card__calendar calendar', { error: isError }]">
     <p class="calendar__ttl subttl">Даты</p>
 
     <div class="calendar__block">
@@ -69,6 +69,13 @@ import ru from 'dayjs/locale/ru'
 import PrevIcon from '../icons/PrevIcon.vue'
 import NextIcon from '../icons/NextIcon.vue'
 
+defineProps({
+  isError: {
+    type: Boolean,
+    default: false,
+  },
+})
+
 dayjs.extend(isoWeek)
 dayjs.extend(weekday)
 dayjs.extend(advancedFormat)
@@ -134,6 +141,12 @@ function isWeekend(day) {
 </script>
 
 <style lang="scss" scoped>
+.error {
+  border: 1px solid;
+  border-color: red !important;
+  border-radius: 4px;
+}
+
 .calendar {
   width: 182px;
   margin-bottom: 20px;

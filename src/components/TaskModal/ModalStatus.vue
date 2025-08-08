@@ -49,8 +49,6 @@ const currentStatus = computed({
   set: (val) => emit('update:modelValue', val),
 })
 
-console.log(currentStatus)
-
 function handleStatusClick(status) {
   if (!isEdit.value) return
   currentStatus.value = status

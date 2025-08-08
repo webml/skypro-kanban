@@ -4,7 +4,7 @@
       <div class="pop-new-card__block">
         <div class="pop-new-card__content">
           <h3 class="pop-new-card__ttl">Создание задачи</h3>
-          <a href="#" class="pop-new-card__close">&#10006;</a>
+          <RouterLink to="/" class="pop-new-card__close">&#10006;</RouterLink>
           <div class="pop-new-card__wrap">
             <form class="pop-new-card__form form-new" id="formNewCard" action="#">
               <div class="form-new__block">
@@ -12,7 +12,7 @@
                 <BaseInput
                   :width="370"
                   :height="49"
-                  class="form-new__input"
+                  :class="['form-new__input', { error: errors.title }]"
                   name="name"
                   id="formTitle"
                   placeholder="Введите название задачи..."
@@ -23,7 +23,7 @@
               <div class="form-new__block">
                 <label for="textArea" class="subttl">Описание задачи</label>
                 <textarea
-                  class="form-new__area"
+                  :class="['form-new__area', { error: errors.description }]"
                   name="text"
                   id="textArea"
                   placeholder="Введите описание задачи..."
@@ -31,9 +31,9 @@
                 ></textarea>
               </div>
             </form>
-            <BaseCalendar />
+            <BaseCalendar :is-error="errors.date" />
           </div>
-          <CategorySelector v-model="task.topic" :is-edit="true" />
+          <CategorySelector v-model="task.topic" :is-edit="true" :is-error="errors.topic" />
           <button class="form-new__create _hover01" id="btnCreate" @click.prevent="createTask">
             Создать задачу
           </button>
@@ -58,11 +58,31 @@ const task = ref({
   description: undefined,
   date: undefined,
 })
+
+const errors = ref({
+  title: false,
+  description: false,
+  topic: false,
+  date: false,
+})
+
 const router = useRouter()
 
 const tasksStore = inject('tasksStore')
 
 const createTask = () => {
+  const trimmedTitle = task.value.title?.trim()
+  const trimmedDescription = task.value.description?.trim()
+
+  errors.value.title = !trimmedTitle
+  errors.value.description = !trimmedDescription
+  errors.value.topic = !task.value.topic
+  errors.value.date = !task.value.date
+
+  if (errors.value.title || errors.value.description || errors.value.topic || errors.value.date) {
+    return
+  }
+
   addTaskQuery(task.value).then((data) => {
     tasksStore.value = data.tasks
     router.push('/')
@@ -71,6 +91,11 @@ const createTask = () => {
 </script>
 
 <style lang="scss" scoped>
+.error {
+  border-color: red !important;
+  background-color: rgba(255, 0, 0, 0.05);
+}
+
 .pop-new-card {
   width: 100%;
   min-width: 375px;

@@ -6,7 +6,7 @@ import { categories } from '@/mocks/categories'
 
 const { card, isLoading } = defineProps({
   card: {
-    id: Number,
+    _id: Number,
     topic: String,
     title: String,
     date: String,
@@ -37,9 +37,9 @@ const { card, isLoading } = defineProps({
         <div :class="['card__theme ', categories[card.topic]]">
           <p :class="[categories[card.topic]]">{{ card.topic }}</p>
         </div>
-        <a href="#popBrowse" target="_self">
+        <RouterLink :to="`/task/${card._id}`" target="_self">
           <ThreeDotsButton />
-        </a>
+        </RouterLink>
       </div>
       <CardContent :task="card" />
     </div>
