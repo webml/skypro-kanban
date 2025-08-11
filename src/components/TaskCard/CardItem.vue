@@ -2,11 +2,11 @@
 import BaseLoader from '../ui/BaseLoader.vue'
 import CardContent from './CardContent.vue'
 import ThreeDotsButton from './ThreeDotsButton.vue'
-import { groups } from '@/mocks/groups'
+import { categories } from '@/mocks/categories'
 
 const { card, isLoading } = defineProps({
   card: {
-    id: Number,
+    _id: Number,
     topic: String,
     title: String,
     date: String,
@@ -34,12 +34,12 @@ const { card, isLoading } = defineProps({
   <div v-else class="cards__item">
     <div class="cards__card card">
       <div class="card__group">
-        <div :class="['card__theme ', groups[card.topic]]">
-          <p :class="[groups[card.topic]]">{{ card.topic }}</p>
+        <div :class="['card__theme ', categories[card.topic]]">
+          <p :class="[categories[card.topic]]">{{ card.topic }}</p>
         </div>
-        <a href="#popBrowse" target="_self">
+        <RouterLink :to="`/task/${card._id}`" target="_self">
           <ThreeDotsButton />
-        </a>
+        </RouterLink>
       </div>
       <CardContent :task="card" />
     </div>

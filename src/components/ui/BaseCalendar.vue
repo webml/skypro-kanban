@@ -1,18 +1,20 @@
 <template>
-  <div class="pop-new-card__calendar calendar">
+  <div :class="['pop-new-card__calendar calendar', { error: isError }]">
     <p class="calendar__ttl subttl">Даты</p>
+
     <div class="calendar__block">
       <div class="calendar__nav">
-        <div class="calendar__month">Сентябрь 2023</div>
+        <div class="calendar__month">{{ monthTitle }}</div>
         <div class="nav__actions">
-          <div class="nav__action" data-action="prev">
+          <div class="nav__action" @click="prevMonth">
             <PrevIcon />
           </div>
-          <div class="nav__action" data-action="next">
+          <div class="nav__action" @click="nextMonth">
             <NextIcon />
           </div>
         </div>
       </div>
+
       <div class="calendar__content">
         <div class="calendar__days-names">
           <div class="calendar__day-name">пн</div>
@@ -23,50 +25,32 @@
           <div class="calendar__day-name -weekend-">сб</div>
           <div class="calendar__day-name -weekend-">вс</div>
         </div>
+
         <div class="calendar__cells">
-          <div class="calendar__cell _other-month">28</div>
-          <div class="calendar__cell _other-month">29</div>
-          <div class="calendar__cell _other-month">30</div>
-          <div class="calendar__cell _cell-day">31</div>
-          <div class="calendar__cell _cell-day">1</div>
-          <div class="calendar__cell _cell-day _weekend">2</div>
-          <div class="calendar__cell _cell-day _weekend">3</div>
-          <div class="calendar__cell _cell-day">4</div>
-          <div class="calendar__cell _cell-day">5</div>
-          <div class="calendar__cell _cell-day">6</div>
-          <div class="calendar__cell _cell-day">7</div>
-          <div class="calendar__cell _cell-day _current">8</div>
-          <div class="calendar__cell _cell-day _weekend">9</div>
-          <div class="calendar__cell _cell-day _weekend">10</div>
-          <div class="calendar__cell _cell-day">11</div>
-          <div class="calendar__cell _cell-day">12</div>
-          <div class="calendar__cell _cell-day">13</div>
-          <div class="calendar__cell _cell-day">14</div>
-          <div class="calendar__cell _cell-day">15</div>
-          <div class="calendar__cell _cell-day _weekend">16</div>
-          <div class="calendar__cell _cell-day _weekend">17</div>
-          <div class="calendar__cell _cell-day">18</div>
-          <div class="calendar__cell _cell-day">19</div>
-          <div class="calendar__cell _cell-day">20</div>
-          <div class="calendar__cell _cell-day">21</div>
-          <div class="calendar__cell _cell-day">22</div>
-          <div class="calendar__cell _cell-day _weekend">23</div>
-          <div class="calendar__cell _cell-day _weekend">24</div>
-          <div class="calendar__cell _cell-day">25</div>
-          <div class="calendar__cell _cell-day">26</div>
-          <div class="calendar__cell _cell-day">27</div>
-          <div class="calendar__cell _cell-day">28</div>
-          <div class="calendar__cell _cell-day">29</div>
-          <div class="calendar__cell _cell-day _weekend">30</div>
-          <div class="calendar__cell _other-month _weekend">1</div>
+          <div
+            v-for="(day, index) in calendarDays"
+            :key="index"
+            class="calendar__cell"
+            :class="[
+              !isSameMonth(day) && '_other-month',
+              isToday(day) && '_current',
+              isSelected(day) && '_selected',
+              isWeekend(day) && '_weekend',
+            ]"
+            @click="selectDate(day)"
+          >
+            {{ day.date() }}
+          </div>
         </div>
       </div>
 
-      <input type="hidden" id="datepick_value" value="08.09.2023" />
+      <input type="hidden" id="datepick_value" :value="selectedDate?.format('DD.MM.YYYY') || ''" />
       <div class="calendar__period">
         <p class="calendar__p date-end">
-          {{ date ? 'Срок исполнения:' : 'Выберите срок исполнения' }}
-          <span class="date-control">{{ date }}</span>
+          {{ selectedDate ? 'Срок исполнения:' : 'Выберите срок исполнения' }}
+          <span class="date-control">
+            {{ selectedDate?.format('DD.MM.YYYY') || '' }}
+          </span>
         </p>
       </div>
     </div>
@@ -74,15 +58,95 @@
 </template>
 
 <script setup>
-import NextIcon from '../icons/NextIcon.vue'
-import PrevIcon from '../icons/PrevIcon.vue'
+import { ref, computed } from 'vue'
+import dayjs from 'dayjs'
+import isoWeek from 'dayjs/plugin/isoWeek'
+import weekday from 'dayjs/plugin/weekday'
+import advancedFormat from 'dayjs/plugin/advancedFormat'
+import localizedFormat from 'dayjs/plugin/localizedFormat'
+import ru from 'dayjs/locale/ru'
 
-const { date } = defineProps({
-  date: { type: String || undefined, default: undefined },
+import PrevIcon from '../icons/PrevIcon.vue'
+import NextIcon from '../icons/NextIcon.vue'
+
+defineProps({
+  isError: {
+    type: Boolean,
+    default: false,
+  },
 })
+
+dayjs.extend(isoWeek)
+dayjs.extend(weekday)
+dayjs.extend(advancedFormat)
+dayjs.extend(localizedFormat)
+dayjs.locale(ru)
+
+const model = defineModel({ type: String, default: undefined })
+
+const selectedDate = computed({
+  get: () => {
+    const parsed = model.value ? dayjs(model.value, 'DD.MM.YYYY') : null
+    return parsed
+  },
+  set: (val) => {
+    model.value = dayjs(val, 'DD.MM.YYYY')
+  },
+})
+
+const currentMonth = ref(selectedDate.value || dayjs()) // текущий видимый месяц
+
+const monthTitle = computed(() => currentMonth.value.format('MMMM YYYY'))
+
+const calendarDays = computed(() => {
+  const startOfMonth = currentMonth.value.startOf('month')
+  const endOfMonth = currentMonth.value.endOf('month')
+  const start = startOfMonth.startOf('week').add(1, 'day')
+  const end = endOfMonth.endOf('week').add(1, 'day')
+
+  const days = []
+  let day = start
+
+  while (day.isBefore(end, 'day')) {
+    days.push(day)
+    day = day.add(1, 'day')
+  }
+
+  return days
+})
+
+function prevMonth() {
+  currentMonth.value = currentMonth.value.subtract(1, 'month')
+}
+function nextMonth() {
+  currentMonth.value = currentMonth.value.add(1, 'month')
+}
+
+function selectDate(day) {
+  selectedDate.value = day
+}
+
+function isSameMonth(day) {
+  return day.month() === currentMonth.value.month()
+}
+function isToday(day) {
+  return day.isSame(dayjs(), 'day')
+}
+function isSelected(day) {
+  return selectedDate.value?.isSame(day, 'day')
+}
+function isWeekend(day) {
+  return [0, 6].includes(day.day())
+}
 </script>
 
 <style lang="scss" scoped>
+.error {
+  border: 1px solid;
+  border-color: red !important;
+  border-radius: 4px;
+}
+
 .calendar {
   width: 182px;
   margin-bottom: 20px;

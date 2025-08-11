@@ -4,7 +4,7 @@
       <div class="pop-new-card__block">
         <div class="pop-new-card__content">
           <h3 class="pop-new-card__ttl">Создание задачи</h3>
-          <a href="#" class="pop-new-card__close">&#10006;</a>
+          <RouterLink to="/" class="pop-new-card__close">&#10006;</RouterLink>
           <div class="pop-new-card__wrap">
             <form class="pop-new-card__form form-new" id="formNewCard" action="#">
               <div class="form-new__block">
@@ -12,7 +12,7 @@
                 <BaseInput
                   :width="370"
                   :height="49"
-                  class="form-new__input"
+                  :class="['form-new__input', { error: errors.title }]"
                   name="name"
                   id="formTitle"
                   placeholder="Введите название задачи..."
@@ -23,7 +23,7 @@
               <div class="form-new__block">
                 <label for="textArea" class="subttl">Описание задачи</label>
                 <textarea
-                  class="form-new__area"
+                  :class="['form-new__area', { error: errors.description }]"
                   name="text"
                   id="textArea"
                   placeholder="Введите описание задачи..."
@@ -31,22 +31,9 @@
                 ></textarea>
               </div>
             </form>
-            <BaseCalendar />
+            <BaseCalendar :is-error="errors.date" v-model="task.date" />
           </div>
-          <div class="pop-new-card__categories categories">
-            <p class="categories__p subttl">Категория</p>
-            <div class="categories__themes">
-              <div class="categories__theme _orange _active-category">
-                <p class="_orange">Web Design</p>
-              </div>
-              <div class="categories__theme _green">
-                <p class="_green">Research</p>
-              </div>
-              <div class="categories__theme _purple">
-                <p class="_purple">Copywriting</p>
-              </div>
-            </div>
-          </div>
+          <CategorySelector v-model="task.topic" :is-edit="true" :is-error="errors.topic" />
           <button class="form-new__create _hover01" id="btnCreate" @click.prevent="createTask">
             Создать задачу
           </button>
@@ -62,6 +49,7 @@ import BaseCalendar from '../ui/BaseCalendar.vue'
 import BaseInput from '../ui/BaseInput.vue'
 import { addTaskQuery } from '@/services/api'
 import { useRouter } from 'vue-router'
+import CategorySelector from '../TaskModal/CategorySelector.vue'
 
 const task = ref({
   title: undefined,
@@ -70,13 +58,32 @@ const task = ref({
   description: undefined,
   date: undefined,
 })
+
+const errors = ref({
+  title: false,
+  description: false,
+  topic: false,
+  date: false,
+})
+
 const router = useRouter()
 
 const tasksStore = inject('tasksStore')
 
 const createTask = () => {
+  const trimmedTitle = task.value.title?.trim()
+  const trimmedDescription = task.value.description?.trim()
+
+  errors.value.title = !trimmedTitle
+  errors.value.description = !trimmedDescription
+  errors.value.topic = !task.value.topic
+  errors.value.date = !task.value.date
+
+  if (errors.value.title || errors.value.description || errors.value.topic || errors.value.date) {
+    return
+  }
+
   addTaskQuery(task.value).then((data) => {
-    console.log(data)
     tasksStore.value = data.tasks
     router.push('/')
   })
@@ -84,6 +91,11 @@ const createTask = () => {
 </script>
 
 <style lang="scss" scoped>
+.error {
+  border-color: red !important;
+  background-color: rgba(255, 0, 0, 0.05);
+}
+
 .pop-new-card {
   width: 100%;
   min-width: 375px;

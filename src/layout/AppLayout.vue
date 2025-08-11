@@ -12,7 +12,7 @@ const setUserInfo = (value) => {
   try {
     localStorage.setItem('userInfo', JSON.stringify(value))
   } catch (e) {
-    console.error('ошибка:', e)
+    // console.error('ошибка:', e)
     return null
   }
 }
@@ -22,7 +22,7 @@ const removeUserInfo = () => {
   try {
     localStorage.removeItem('userInfo')
   } catch (e) {
-    console.error('ошибка:', e)
+    // console.error('ошибка:', e)
   }
 }
 

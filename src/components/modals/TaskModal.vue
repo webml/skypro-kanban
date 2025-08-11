@@ -4,34 +4,30 @@
       <div class="pop-browse__block">
         <div class="pop-browse__content">
           <div class="pop-browse__top-block">
-            <h3 class="pop-browse__ttl">Название задачи</h3>
-            <div class="categories__theme theme-top _orange _active-category">
-              <p class="_orange">Web Design</p>
-            </div>
+            <BaseLoader v-if="isLoading" :width="220" :height="36" :border-radius="8" />
+            <h3 v-else class="pop-browse__ttl">{{ task.title }}</h3>
+            <BaseLoader v-if="isLoading" :width="120" :height="36" :border-radius="24" />
+            <CategoryDisplay v-else :category="task.topic" :is-edit="isEdit" />
           </div>
-          <ModalStatus />
+          <ModalStatus v-model="task.status" :is-loading="isLoading" />
           <div class="pop-browse__wrap">
             <form class="pop-browse__form form-browse" id="formBrowseCard" action="#">
               <div class="form-browse__block">
                 <label for="textArea01" class="subttl">Описание задачи</label>
                 <textarea
-                  class="form-browse__area"
+                  :class="['form-browse__area', { error: error }]"
                   name="text"
                   id="textArea01"
-                  readonly
+                  :readonly="!isEdit"
                   placeholder="Введите описание задачи..."
+                  v-model="task.description"
                 ></textarea>
               </div>
             </form>
-            <BaseCalendar />
+            <BaseCalendar v-model="task.date" />
           </div>
-          <div class="theme-down__categories theme-down">
-            <p class="categories__p subttl">Категория</p>
-            <div class="categories__theme _orange _active-category">
-              <p class="_orange">Web Design</p>
-            </div>
-          </div>
-          <ModalFooter />
+          <CategorySelector v-model="task.topic" :is-edit="isEdit" />
+          <ModalFooter :task="task" :is-edit="isEdit ? isEdit : false" v-model:error="error" />
         </div>
       </div>
     </div>
@@ -42,9 +38,53 @@
 import BaseCalendar from '@/components/ui/BaseCalendar.vue'
 import ModalFooter from '../TaskModal/ModalFooter.vue'
 import ModalStatus from '../TaskModal/ModalStatus.vue'
+import { onMounted, ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
+import { getTaskById } from '@/services/api'
+import BaseLoader from '../ui/BaseLoader.vue'
+import CategorySelector from '../TaskModal/CategorySelector.vue'
+import CategoryDisplay from '../TaskModal/CategoryDisplay.vue'
+
+const task = ref({
+  id: 0,
+  topic: '',
+  title: '',
+  date: null,
+  status: null,
+  description: '',
+})
+
+const error = ref(false)
+
+const isLoading = ref(true)
+const isEdit = ref(false)
+
+const route = useRoute()
+const taskId = route.params.id
+
+onMounted(async () => {
+  const taskById = await getTaskById(taskId)
+  if (taskById) {
+    task.value = taskById.task
+    isLoading.value = false
+  }
+})
+
+watch(
+  () => route.path,
+  () => {
+    isEdit.value = route.meta.isEdit
+  },
+  { immediate: true },
+)
 </script>
 
 <style lang="scss" scoped>
+.error {
+  border-color: red !important;
+  background-color: rgba(255, 0, 0, 0.05);
+}
+
 .pop-browse {
   width: 100%;
   height: 100%;
@@ -85,7 +125,6 @@ import ModalStatus from '../TaskModal/ModalStatus.vue'
   opacity: 1;
 }
 .pop-browse__content .theme-down {
-  display: none;
   margin-bottom: 20px;
 }
 .pop-browse__content .theme-top {

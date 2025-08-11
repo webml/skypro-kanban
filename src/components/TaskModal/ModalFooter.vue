@@ -8,7 +8,7 @@
         <a href="#" @click.prevent="cancelEdit">Отменить</a>
       </button>
       <button class="btn-edit__delete _btn-bor _hover03" id="btnDelete">
-        <a href="#">Удалить задачу</a>
+        <a href="#" @click.prevent="removeTask">Удалить задачу</a>
       </button>
     </div>
     <div v-else class="btn-group">
@@ -26,48 +26,54 @@
 </template>
 
 <script setup>
-import { deleteTaskQuery } from '@/services/api'
-import { inject, ref, watch } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { deleteTaskQuery, updateTaskQuery } from '@/services/api'
+import { inject } from 'vue'
+import { useRouter } from 'vue-router'
 
-const isEdit = ref(false)
-const route = useRoute()
-const router = useRouter()
-
-const taskId = route.params.id
-
-watch(
-  () => route.fullPath,
-  (newPath) => {
-    isEdit.value = newPath.endsWith('/edit')
+const props = defineProps({
+  isEdit: {
+    type: Boolean,
+    required: true,
   },
-  { immediate: true },
-)
+  task: {
+    type: Object,
+    required: true,
+  },
+})
 
+const emit = defineEmits(['update:error'])
+
+const router = useRouter()
 const tasksStore = inject('tasksStore')
 
-const removeTask = () => {
-  console.log(taskId)
-  deleteTaskQuery(taskId).then(({ tasks }) => {
+const removeTask = async () => {
+  if (!props.task?._id) return
+  await deleteTaskQuery(props.task._id).then(({ tasks }) => {
     tasksStore.value = tasks
     router.push('/')
   })
 }
 
 const setEdit = () => {
-  isEdit.value = true
-  router.push(`/task/${taskId}/edit`)
+  router.push(`/task/${props.task._id}/edit`)
 }
 
 const cancelEdit = () => {
-  isEdit.value = false
-  router.push(`/task/${taskId}`)
+  router.push('/')
 }
 
-const saveTask = () => {
-  // Логика сохранения задачи здесь
-  isEdit.value = false
-  router.push(`/task/${taskId}`)
+const saveTask = async () => {
+  if (!props.task?._id) return
+
+  if (props.task.description.trim().length === 0) {
+    emit('update:error', true)
+    return
+  }
+
+  await updateTaskQuery(props.task._id, props.task).then(({ tasks }) => {
+    tasksStore.value = tasks
+    router.push('/')
+  })
 }
 
 const closeTask = () => {

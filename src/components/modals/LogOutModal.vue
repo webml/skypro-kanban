@@ -10,7 +10,11 @@
             <button class="pop-exit__exit-yes _hover01" id="exitYes" v-on:click="logout">
               <a href="modal/signin.html">Да, выйти</a>
             </button>
-            <button class="pop-exit__exit-no _hover03" id="exitNo">
+            <button
+              class="pop-exit__exit-no _hover03"
+              id="exitNo"
+              @click.prevent="router.push('/')"
+            >
               <a href="main.html">Нет, остаться</a>
             </button>
           </div>
@@ -34,7 +38,6 @@ function logout(e) {
 
 <style lang="scss" scoped>
 .pop-exit {
-  display: none;
   width: 100%;
   height: 100%;
   min-width: 320px;

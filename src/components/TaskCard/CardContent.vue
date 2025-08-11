@@ -1,5 +1,6 @@
 <script setup>
 import CalendarIcon from '@/components/icons/CalendarIcon.vue'
+import dayjs from 'dayjs'
 
 const { task } = defineProps({
   task: {
@@ -19,7 +20,7 @@ const { task } = defineProps({
     </RouterLink>
     <div class="card__date">
       <CalendarIcon />
-      <p>{{ task.date }}</p>
+      <p>{{ dayjs(task.date).format('DD.MM.YY') }}</p>
     </div>
   </div>
 </template>

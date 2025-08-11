@@ -26,7 +26,11 @@
         @focus="clearError('password')"
       />
 
-      <BaseButton :onclick="handleSubmit">
+      <p v-if="error" class="error-message">
+        {{ error }}
+      </p>
+
+      <BaseButton :disabled="!!error" :class="{ disabled: !!error }" :onclick="handleSubmit">
         {{ isSignUp ? 'Зарегистрироваться' : 'Войти' }}
       </BaseButton>
       <div v-show="!isSignUp">
@@ -70,32 +74,41 @@ const error = ref('')
 
 const clearError = (field) => {
   errors.value[field] = false
+  error.value = ''
 }
 
 function validateForm() {
   let isValid = true
+  let allFieldsFilled = true
   error.value = ''
-  // Сбросим все ошибки
+
   errors.value.name = false
   errors.value.login = false
   errors.value.password = false
-  // Проверка имени (только для регистрации)
+
   if (props.isSignUp && !formData.value.name.trim()) {
     errors.value.name = true
     isValid = false
+    allFieldsFilled = false
   }
-  // Проверка логина (эл. почты)
+
   if (!formData.value.login.trim()) {
     errors.value.login = true
     isValid = false
+    allFieldsFilled = false
   }
-  // Проверка пароля
+
   if (!formData.value.password.trim()) {
     errors.value.password = true
     isValid = false
+    allFieldsFilled = false
   }
-  // Если есть ошибки, установим общее сообщение
-  if (!isValid) {
+
+  if (!isValid && props.isSignUp) {
+    error.value = allFieldsFilled
+      ? 'Введенные вами данные не корректны. Чтобы завершить регистрацию, введите данные корректно и повторите попытку.'
+      : 'Введенные вами данные не корректны. Чтобы завершить регистрацию, заполните все поля в форме.'
+  } else if (!isValid) {
     error.value = 'Пожалуйста, заполните все обязательные поля'
   }
 
@@ -104,20 +117,28 @@ function validateForm() {
 
 async function handleSubmit(event) {
   event.preventDefault()
-  // Валидация формы перед отправкой
+
   if (!validateForm()) {
     return
   }
+
   try {
     const data = props.isSignUp
       ? await signUp(formData.value)
       : await logIn({ login: formData.value.login, password: formData.value.password })
+
     if (data) {
       localStorage.setItem('userInfo', JSON.stringify(data))
       router.push('/')
     }
   } catch (err) {
-    error.value = err.message
+    if (!props.isSignUp) {
+      error.value =
+        'Введенные вами данные не распознаны. Проверьте свой логин и пароль и повторите попытку входа.'
+    } else {
+      error.value =
+        'Введенные вами данные не корректны. Чтобы завершить регистрацию, введите данные корректно и повторите попытку.'
+    }
   }
 }
 </script>
@@ -126,6 +147,27 @@ async function handleSubmit(event) {
 .error {
   border-color: red !important;
   background-color: rgba(255, 0, 0, 0.1);
+}
+
+.error-message {
+  color: red;
+  margin-top: -10px;
+  margin-bottom: 10px;
+  max-width: 248px;
+
+  font-family: Arial;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 150%;
+  letter-spacing: -1%;
+  text-align: center;
+}
+
+.disabled {
+  background-color: #ccc !important;
+  cursor: not-allowed !important;
+  pointer-events: none;
+  color: #666 !important;
 }
 
 .text {
@@ -138,7 +180,9 @@ async function handleSubmit(event) {
 }
 
 .link {
-  border-bottom: 1px solid rgba(148, 166, 190, 0.4);
+  // border-bottom: 1px solid rgba(148, 166, 190, 0.4);
+  text-decoration: underline;
+  display: block;
 }
 .head {
   font-weight: 700;
