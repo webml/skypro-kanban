@@ -23,7 +23,7 @@ const categories = {
 defineProps({
   category: {
     type: String,
-    default: '',
+    default: 'Research',
   },
   isEdit: {
     type: Boolean,

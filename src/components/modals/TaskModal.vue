@@ -15,7 +15,7 @@
               <div class="form-browse__block">
                 <label for="textArea01" class="subttl">Описание задачи</label>
                 <textarea
-                  class="form-browse__area"
+                  :class="['form-browse__area', { error: error }]"
                   name="text"
                   id="textArea01"
                   :readonly="!isEdit"
@@ -27,7 +27,7 @@
             <BaseCalendar v-model="task.date" />
           </div>
           <CategorySelector v-model="task.topic" :is-edit="isEdit" />
-          <ModalFooter :task="task" :is-edit="isEdit ? isEdit : false" />
+          <ModalFooter :task="task" :is-edit="isEdit ? isEdit : false" v-model:error="error" />
         </div>
       </div>
     </div>
@@ -54,6 +54,8 @@ const task = ref({
   description: '',
 })
 
+const error = ref(false)
+
 const isLoading = ref(true)
 const isEdit = ref(false)
 
@@ -78,6 +80,11 @@ watch(
 </script>
 
 <style lang="scss" scoped>
+.error {
+  border-color: red !important;
+  background-color: rgba(255, 0, 0, 0.05);
+}
+
 .pop-browse {
   width: 100%;
   height: 100%;

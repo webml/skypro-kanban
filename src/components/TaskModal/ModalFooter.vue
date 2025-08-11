@@ -41,12 +41,14 @@ const props = defineProps({
   },
 })
 
+const emit = defineEmits(['update:error'])
+
 const router = useRouter()
 const tasksStore = inject('tasksStore')
 
 const removeTask = async () => {
   if (!props.task?._id) return
-  await deleteTaskQuery(props.task.id).then(({ tasks }) => {
+  await deleteTaskQuery(props.task._id).then(({ tasks }) => {
     tasksStore.value = tasks
     router.push('/')
   })
@@ -62,6 +64,12 @@ const cancelEdit = () => {
 
 const saveTask = async () => {
   if (!props.task?._id) return
+
+  if (props.task.description.trim().length === 0) {
+    emit('update:error', true)
+    return
+  }
+
   await updateTaskQuery(props.task._id, props.task).then(({ tasks }) => {
     tasksStore.value = tasks
     router.push('/')

@@ -31,7 +31,7 @@
                 ></textarea>
               </div>
             </form>
-            <BaseCalendar :is-error="errors.date" />
+            <BaseCalendar :is-error="errors.date" v-model="task.date" />
           </div>
           <CategorySelector v-model="task.topic" :is-edit="true" :is-error="errors.topic" />
           <button class="form-new__create _hover01" id="btnCreate" @click.prevent="createTask">

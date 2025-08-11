@@ -151,10 +151,16 @@ async function handleSubmit(event) {
 
 .error-message {
   color: red;
-  font-size: 14px;
-  text-align: center;
   margin-top: -10px;
   margin-bottom: 10px;
+  max-width: 248px;
+
+  font-family: Arial;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 150%;
+  letter-spacing: -1%;
+  text-align: center;
 }
 
 .disabled {
@@ -174,7 +180,9 @@ async function handleSubmit(event) {
 }
 
 .link {
-  border-bottom: 1px solid rgba(148, 166, 190, 0.4);
+  // border-bottom: 1px solid rgba(148, 166, 190, 0.4);
+  text-decoration: underline;
+  display: block;
 }
 .head {
   font-weight: 700;
